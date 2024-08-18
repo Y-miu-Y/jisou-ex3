@@ -21,7 +21,7 @@ jobs:
           node-version: "18.18.0"
       - name: Install dependencies
         run: npm install
-  # 自動テスト実施
+  # テスト実施
   test:
     name: test
     runs-on: ubuntu-latest
