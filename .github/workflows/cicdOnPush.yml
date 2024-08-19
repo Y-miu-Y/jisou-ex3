@@ -27,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Test.
+        uses: actions/checkout@v2
         run: make test
 
   # deploy:
