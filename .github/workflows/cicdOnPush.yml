@@ -21,14 +21,20 @@ jobs:
           node-version: "18.18.0"
       - name: Install dependencies
         run: npm install
+
   # 自動テスト実施
   test:
     needs: build
     name: test
     runs-on: ubuntu-latest
     steps:
-      - name: Run Test.
+      - name: Checkout code
         uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18.18.0"
+      - name: Run Test.
         run: make test
 
   # deploy:
