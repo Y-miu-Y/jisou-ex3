@@ -23,6 +23,7 @@ jobs:
         run: npm install
   # 自動テスト実施
   test:
+    needs: build
     name: test
     runs-on: ubuntu-latest
     steps:
@@ -33,7 +34,7 @@ jobs:
   # deploy:
   #   name: deploy
   #   runs-on: ubuntu-latest
-  #   needs: build
+  #   needs: test
   #   steps:
   #     - name: Checkout code
   #       uses: actions/checkout@v2
