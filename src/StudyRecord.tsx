@@ -1,12 +1,14 @@
-import { Button, ChakraProvider } from "@chakra-ui/react"
+import { ChakraProvider } from "@chakra-ui/react"
+import { FC } from "react"
+import { RecordsTable } from "./components/pages/RecordsTable"
 
 
-export const StudyRecord = () => {
+export const StudyRecord: FC = () => {
 
   return (
     <>
       <ChakraProvider>
-        <Button>おためしボタン</Button>
+        <RecordsTable />
       </ChakraProvider>
     </>
   )
