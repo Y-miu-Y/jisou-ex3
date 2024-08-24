@@ -4,7 +4,6 @@ export class Record{
   readonly time!: number;
   readonly created_at!: Date;
 
-
   constructor(init?: Partial<Record>){
     Object.assign(this, init);
   };

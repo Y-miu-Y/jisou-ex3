@@ -22,5 +22,5 @@ export const useAllRecords = () => {
       })
   }, []);
 
-  return { getRecords, isLoading, records };
+  return { getRecords, isLoading, records, setRecords };
 };

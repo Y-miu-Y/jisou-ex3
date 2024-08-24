@@ -8,7 +8,7 @@ export const Header: FC = () => {
     <>
       <Flex as="header">
         <Box>
-          <Heading as="h1" fontSize={{ base: "md", md: "lg" }}>
+          <Heading as="h1" fontSize={{ base: "lg", md: "3xl" }}>
             学習記録一覧
           </Heading>
         </Box>

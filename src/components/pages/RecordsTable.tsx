@@ -1,11 +1,16 @@
 import { FC, memo, useEffect } from "react";
 import { useAllRecords } from "../../hooks/uesAllRecords";
 import { Loading } from "../molecules/Loading";
-import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import { Header } from "../organism/layout/Header";
+import { ActionButton } from "../atoms/buttons/ActionButton";
+import { AddRecordModal } from "../organism/records/AddRecordModal";
+import { useInsertRecords } from "../../hooks/useInsertRecords";
 
 export const RecordsTable: FC = memo(() => {
-  const { getRecords, isLoading, records } = useAllRecords();
+  const { getRecords, isLoading, records, setRecords} = useAllRecords();
+  const {isOpen, onClose, onOpen} = useDisclosure();
+  const { addRecord } = useInsertRecords(records, setRecords);
 
   useEffect(() => getRecords(), [getRecords]);
 
@@ -17,8 +22,10 @@ export const RecordsTable: FC = memo(() => {
         <Loading />
       ) : (
         <>
-        
           <Header />
+          <ActionButton onClick={onOpen}>
+            新規登録
+          </ActionButton>
           <TableContainer>
             <Table>
               <Thead>
@@ -41,6 +48,7 @@ export const RecordsTable: FC = memo(() => {
               </Tbody>
             </Table>
           </TableContainer>
+          <AddRecordModal isOpen={isOpen} onClose={onClose} addRecord={addRecord}></AddRecordModal>
         </>
       )}
     </>
