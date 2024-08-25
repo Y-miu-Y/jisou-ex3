@@ -1,6 +1,6 @@
 deploy:
 	npm run build
-	firebase deploy
+	./node_modules/.bin/firebase deploy deploy
 
 test:
 	npm run test
