@@ -1,16 +1,18 @@
 import { FC, memo, useEffect } from "react";
 import { useAllRecords } from "../../hooks/uesAllRecords";
 import { Loading } from "../molecules/Loading";
-import { Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
+import { Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import { Header } from "../organism/layout/Header";
 import { ActionButton } from "../atoms/buttons/ActionButton";
-import { AddRecordModal } from "../organism/records/AddRecordModal";
+import { RecordModalForm } from "../organism/records/RecordModalForm";
 import { useInsertRecords } from "../../hooks/useInsertRecords";
+import { useDeleteRecord } from "../../hooks/useDeleteRecord";
 
 export const RecordsTable: FC = memo(() => {
   const { getRecords, isLoading, records, setRecords} = useAllRecords();
   const {isOpen, onClose, onOpen} = useDisclosure();
   const { addRecord } = useInsertRecords(records, setRecords);
+  const { removeRecord } = useDeleteRecord(records, setRecords);
 
   useEffect(() => getRecords(), [getRecords]);
 
@@ -42,13 +44,17 @@ export const RecordsTable: FC = memo(() => {
                     <Td>{record.title}</Td>
                     <Td>{record.time}時間</Td>
                     <Td>編集</Td>
-                    <Td>削除</Td>
+                    <Td>
+                      <Button onClick={() => removeRecord(record.id)}>
+                        削除
+                      </Button>
+                    </Td>
                   </Tr>
                 ))}
               </Tbody>
             </Table>
           </TableContainer>
-          <AddRecordModal isOpen={isOpen} onClose={onClose} addRecord={addRecord}></AddRecordModal>
+          <RecordModalForm isOpen={isOpen} onClose={onClose} addRecord={addRecord}></RecordModalForm>
         </>
       )}
     </>
