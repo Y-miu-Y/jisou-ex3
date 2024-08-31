@@ -3,4 +3,5 @@ deploy:
 	./node_modules/.bin/firebase deploy deploy
 
 test:
+	clear
 	npm run test

@@ -4,7 +4,7 @@ import { FC, memo } from "react";
 
 export const Loading: FC = memo(() => {
   return (
-    <Center h="100vh">
+    <Center h="100vh" data-testid="loading" >
       <Spinner />
     </Center>
   );

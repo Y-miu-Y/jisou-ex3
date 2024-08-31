@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Record } from "../types/api/Record";
-import { getStudyRecords } from "./api/getAllRecords";
+import { getStudyRecords } from "./api/getStudyRecords";
 
 export const useAllRecords = () => {
   const [ isLoading, setIsLoading ] = useState(false);

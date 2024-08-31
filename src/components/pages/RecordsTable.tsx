@@ -29,7 +29,7 @@ export const RecordsTable: FC = memo(() => {
             新規登録
           </ActionButton>
           <TableContainer>
-            <Table>
+            <Table data-testid='studyRecordTable'>
               <Thead>
                 <Tr>
                   <Th>学習内容</Th>
