@@ -10,7 +10,7 @@ type Props = {
 export const ActionButton: FC<Props> = memo(({children, onClick, isLoading}) => {
   return(
     <>
-      <Button onClick={onClick} isLoading={isLoading}>
+      <Button onClick={onClick} isLoading={isLoading} data-testid='study-input-button'>
         {children}
       </Button>
     </>

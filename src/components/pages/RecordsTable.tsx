@@ -16,8 +16,6 @@ export const RecordsTable: FC = memo(() => {
 
   useEffect(() => getRecords(), [getRecords]);
 
-  console.log(records);
-
   return(
     <>
       {isLoading? (

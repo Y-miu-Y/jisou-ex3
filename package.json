@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "NODE_ENV=test jest"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
@@ -36,6 +36,8 @@
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^25.0.0",
+    "jsdom-global": "^3.0.2",
     "react-test-renderer": "^18.3.1",
     "ts-jest": "^29.2.4",
     "typescript": "^5.5.3",

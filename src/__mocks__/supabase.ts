@@ -28,5 +28,5 @@ export const mockSupabaseResolvedValue = (value: any) => {
 };
 
 // テストファイルの先頭に追加
-jest.mock('../../utils/supabase');
+jest.mock('../utils/supabase');
 

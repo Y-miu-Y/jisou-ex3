@@ -38,8 +38,8 @@ export const RecordModalForm:FC<Props> = memo(({isOpen, onClose, title, time, ad
     <>
       <Modal isOpen={isOpen} onClose={endModal} autoFocus={false} motionPreset="slideInBottom">
         <ModalOverlay></ModalOverlay>
-        <ModalContent pb={6}>
-          <ModalHeader>ユーザー詳細</ModalHeader>
+        <ModalContent pb={6} data-testid="modal-insert">
+          <ModalHeader data-testid="modal-header">新規登録</ModalHeader>
           <ModalCloseButton></ModalCloseButton>
           <ModalBody mx={4}>
             <form onSubmit={onSubmit}>
@@ -47,6 +47,7 @@ export const RecordModalForm:FC<Props> = memo(({isOpen, onClose, title, time, ad
                 <FormControl isInvalid={Boolean(errors.title)}>
                   <FormLabel htmlFor='title'>学習内容</FormLabel>
                   <Input
+                    data-testid="modal-input-title"
                     id='title'
                     {...register('title', {
                       required: '内容の入力は必須です'
@@ -60,6 +61,7 @@ export const RecordModalForm:FC<Props> = memo(({isOpen, onClose, title, time, ad
                 <FormControl isInvalid={Boolean(errors.time)}>
                   <FormLabel htmlFor='time'>学習時間</FormLabel>
                   <Input
+                    data-testid="modal-input-time"
                     id='time'
                     {...register('time', {
                       //validation here
@@ -68,11 +70,11 @@ export const RecordModalForm:FC<Props> = memo(({isOpen, onClose, title, time, ad
                     })}
                     value={time}
                   />
-                  <FormErrorMessage>
+                  <FormErrorMessage data-testid="modal-error">
                     {errors.time && errors.time.message}
                   </FormErrorMessage>
                 </FormControl>
-                <Button type='submit' isLoading={isSubmitting}>
+                <Button type='submit' isLoading={isSubmitting} data-testid="modal-submit">
                   登録
                 </Button>
               </Stack>
