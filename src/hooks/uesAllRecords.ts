@@ -15,7 +15,7 @@ export const useAllRecords = () => {
         setRecords(res?.data?.map((col) => new Record(col)) ?? []);
       })
       .catch(() => {
-        alert("取得時エラー発生");
+        // window.alert("取得時エラー発生");
       })
       .finally(()=> {
         setIsLoading(false);
