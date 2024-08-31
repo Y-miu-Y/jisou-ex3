@@ -9,7 +9,7 @@ export const useInsertRecords = (records:Array<Record>, setRecords:Dispatch<SetS
     if(title !== "" && time >= 0){
       insertRecord(title, time)
       .then((res) => {
-        const record = res.data?.map((col) => new Record(col)).find((d) => d);
+        const record = res.data;
         if(record){
           setRecords([...records, record]);
         }

@@ -1,7 +1,6 @@
 import { StudyRecord } from "../StudyRecord";
-import { render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { Record } from "../types/api/Record";
-import { mockSupabaseResolvedValue } from "../__mocks__/supabase";
 import { userEvent } from "@testing-library/user-event";
 import { act } from "react";
 
@@ -14,6 +13,8 @@ describe("学習記録一覧のテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
+  afterEach(() => {cleanup()});
 
   /* ここからテスト */
 
@@ -47,8 +48,6 @@ describe("学習記録一覧のテスト", () => {
         'created_at': new Date("2024-03-03 00:00:00.000000")
       })
     ];    
-    
-    mockSupabaseResolvedValue({ data: mockData, error: null });
 
     render(<StudyRecord />);
     expect(await screen.findByTestId('studyRecordTable')).toBeTruthy();
@@ -65,38 +64,51 @@ describe("学習記録一覧のテスト", () => {
     expect((await screen.findAllByText('学習記録一覧'))[0]).toBeTruthy();
   });
 
-  it("登録できること", async() => {
+  it("登録できること", async () => {
+    mockInsertRecord.mockResolvedValue({ 
+      data: [{ id: '1', title: 'テスト1', time: 2 }], 
+      error: null 
+    });
+  
     render(<StudyRecord />);
+  
+    // ボタンを見つけてクリック
     const inputButton = await screen.findByTestId('study-input-button');
-    act(() => {
-      inputButton.click();
-    });
-
-    const modalTitle = await screen.findByTestId('modal-input-title');
-    const modalTime = await screen.findByTestId('modal-input-time');
+    await userEvent.click(inputButton);
+  
+    // モーダル内の要素を見つける
+    const modalTitle = await screen.findByTestId('modal-input-title') as HTMLInputElement;
+    const modalTime = await screen.findByTestId('modal-input-time') as HTMLInputElement;
     const modalSubmit = await screen.findByTestId('modal-submit');
-
-    act(() => {
-      userEvent.type(modalTitle, 'テスト1');
-      userEvent.type(modalTime, "2");
+  
+    // タイトルを入力
+    await userEvent.type(modalTitle, 'テスト1');
+    
+    // 時間を入力
+    await userEvent.type(modalTime, "2");
+  
+    // 送信ボタンをクリック
+    await userEvent.click(modalSubmit);
+  
+    // 結果を確認
+    await waitFor(() => {
+      expect(screen.getByText('テスト1')).toBeInTheDocument();
+      expect(screen.getByText('2時間')).toBeInTheDocument();
     });
 
-    modalSubmit.click();
-
-    expect(await screen.findAllByText('テスト1')).toBeTruthy();
   });
 
   it("モーダルが新規登録というタイトルになっている", async() => {
     render(<StudyRecord />);
     const inputButton = await screen.findByTestId('study-input-button');
-    inputButton.click();
+    await userEvent.click(inputButton);
     expect(await screen.findByTestId('modal-header')).toBeTruthy();
   });
 
   it("学習内容がないときに登録するとエラーがでる", async() => {
     render(<StudyRecord />);
     const inputButton = await screen.findByTestId('study-input-button');
-    inputButton.click();
+    await userEvent.click(inputButton);
     // const modalTitle = await screen.findByTestId('modal-input-title');
     const modalTime = await screen.findByTestId('modal-input-time');
     const modalSubmit = await screen.findByTestId('modal-submit');
@@ -114,7 +126,7 @@ describe("学習記録一覧のテスト", () => {
   it("学習時間がないときに登録するとエラーがでる(未入力)", async() => {
     render(<StudyRecord />);
     const inputButton = await screen.findByTestId('study-input-button');
-    inputButton.click();
+    await userEvent.click(inputButton);
     const modalTitle = await screen.findByTestId('modal-input-title');
     // const modalTime = await screen.findByTestId('modal-input-time');
     const modalSubmit = await screen.findByTestId('modal-submit');
@@ -132,7 +144,7 @@ describe("学習記録一覧のテスト", () => {
   it("学習時間がないときに登録するとエラーがでる(0以上でないときのエラー)", async() => {
     render(<StudyRecord />);
     const inputButton = await screen.findByTestId('study-input-button');
-    inputButton.click();
+    await userEvent.click(inputButton);
     const modalTitle = await screen.findByTestId('modal-input-title');
     const modalTime = await screen.findByTestId('modal-input-time');
     const modalSubmit = await screen.findByTestId('modal-submit');
@@ -145,7 +157,6 @@ describe("学習記録一覧のテスト", () => {
     modalSubmit.click();
 
     expect(await screen.findByText('時間は0以上である必要があります')).toBeTruthy();
-    screen.debug();
   });
 
   it("削除ができること", async() => {
