@@ -1,5 +1,5 @@
 import { FC, memo, useEffect } from "react";
-import { useAllRecords } from "../../hooks/uesAllRecords";
+import { useAllRecords } from "../../hooks/useAllRecords";
 import { Loading } from "../molecules/Loading";
 import { Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import { Header } from "../organism/layout/Header";
@@ -43,7 +43,7 @@ export const RecordsTable: FC = memo(() => {
                     <Td>{record.time}時間</Td>
                     <Td>編集</Td>
                     <Td>
-                      <Button onClick={() => removeRecord(record.id)}>
+                      <Button onClick={() => removeRecord(record.id)} data-testid={`delete-button_${record.id}`}>
                         削除
                       </Button>
                     </Td>

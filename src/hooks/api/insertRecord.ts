@@ -7,21 +7,21 @@ export const insertRecord = async (title: string, time: number): Promise<{ data:
       throw new Error('Supabase client is not initialized properly');
     }
 
-    const { data, error } = await supabase
+    const response = await supabase
       .from('study-record')
       .insert({ title, time })
       .select()
       .single();
 
-    if (error) throw error;
+    if (response.error) throw response.error;
 
-    if (data) {
+    if (response.data) {
       return { 
         data: new Record({
-          id: data.id,
-          title: data.title,
-          time: data.time,
-          created_at: new Date(data.created_at)
+          id: response.data.id,
+          title: response.data.title,
+          time: response.data.time,
+          created_at: new Date(response.data.created_at)
         }), 
         error: null 
       };

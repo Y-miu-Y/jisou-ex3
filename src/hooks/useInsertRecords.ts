@@ -11,7 +11,7 @@ export const useInsertRecords = (records:Array<Record>, setRecords:Dispatch<SetS
       .then((res) => {
         const record = res.data;
         if(record){
-          setRecords([...records, record]);
+          setRecords(prevRecords => [...prevRecords, res.data!]);
         }
       })
       .finally(() => {});
