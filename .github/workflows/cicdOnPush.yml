@@ -1,12 +1,16 @@
 name: build-with-deploy
 
 on:
+  schedule:
+    - cron: "0 6 * * *"
   workflow_dispatch:
   push:
+    branches: [master]
 
 env:
   VITE_SUPABASE_URL: ${{secrets.VITE_SUPABASE_URL}}
   VITE_SUPABASE_ANON_KEY: ${{secrets.VITE_SUPABASE_ANON_KEY}}
+  TESTENV_HELLO: "hello env"
 
 jobs:
   build:
@@ -18,31 +22,19 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "18.18.0"
+          node-version: "18"
       - name: Install dependencies
         run: npm install
-
-  # 自動テスト実施
-  test:
-    needs: build
-    name: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "18.18.0"
-      - name: パッケージインストール
-        run: npm ci
-      - name: Run Test.
-        run: make test
+      # 自動テスト実施
+      - name: Run Test
+        run: npm run test
+      - name: Run build
+        run: npm run build
 
   deploy:
     name: deploy
     runs-on: ubuntu-latest
-    needs: test
+    needs: build
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -61,7 +53,7 @@ jobs:
         run: ./node_modules/.bin/firebase use ${{ secrets.FIREBASE_PROJECT_ID }}
       - name: Deploy to Firebase Hosting
         run: |
-          make deploy
+          ./node_modules/.bin/firebase deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_CLI_EXPERIMENTS: webframeworks

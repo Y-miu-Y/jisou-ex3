@@ -57,9 +57,9 @@ export const RecordsTable: FC = memo(() => {
               </Thead>
               <Tbody>
                 {records.map((record) => (
-                  <Tr key={record.id}>
-                    <Td>{record.title}</Td>
-                    <Td>{record.time}時間</Td>
+                  <Tr key={record.id} data-testid={`row_${record.id}`}>
+                    <Td data-testid={`row-title_${record.id}`}>{record.title}</Td>
+                    <Td data-testid={`row-time_${record.id}`}>{record.time}時間</Td>
                     <Td>
                       <Button onClick={() => openUpdateModal(record)} data-testid={`update-button_${record.id}`}>
                         更新
