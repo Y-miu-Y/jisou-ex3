@@ -18,7 +18,7 @@ type formInputs = {
 export const RecordModalForm:FC<Props> = memo(({isOpen, onClose, initialData, onSubmit}) =>{
 
   const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<formInputs>({
-    defaultValues: initialData || { title: "", time: 0 }
+    defaultValues: initialData || { title: "", time: undefined }
   });
   
   useEffect(() => {
@@ -43,7 +43,7 @@ export const RecordModalForm:FC<Props> = memo(({isOpen, onClose, initialData, on
       <Modal isOpen={isOpen} onClose={endModal} autoFocus={false} motionPreset="slideInBottom">
         <ModalOverlay></ModalOverlay>
         <ModalContent pb={6} data-testid="modal-insert">
-          <ModalHeader data-testid="modal-header">新規登録</ModalHeader>
+          <ModalHeader data-testid="modal-header">{initialData?.id? '記録編集' : '新規登録'}</ModalHeader>
           <ModalCloseButton></ModalCloseButton>
           <ModalBody mx={4}>
             <form onSubmit={handleFormSubmit}>

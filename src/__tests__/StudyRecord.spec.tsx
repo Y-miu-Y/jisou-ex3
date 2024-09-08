@@ -2,11 +2,14 @@ import { StudyRecord } from "../StudyRecord";
 import { render, screen, waitFor } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { act } from "react";
-import { mockInsertRecord } from "../__mocks__/mockInsertRecord";
+import { Record } from "../types/api/Record";
 
 
 
 describe("学習記録一覧のテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   /* モック設定 */
 
   /* ここからテスト */
@@ -36,13 +39,13 @@ describe("学習記録一覧のテスト", () => {
 
   it("登録できること", async () => {
     // insertRecord のモックを設定
-    const mock = (mockInsertRecord as jest.Mock).mockResolvedValue({
-      data: {
+    const mock = jest.fn().mockResolvedValue({
+      data: [{
         id: '1',
         title: 'テスト1',
         time: 2,
         created_at: new Date().toISOString()
-      },
+      }],
       error: null
     });
 
@@ -147,13 +150,17 @@ describe("学習記録一覧のテスト", () => {
       }
     });
 
-    const getAllMock = jest.fn().mockResolvedValue({
-      data: {
+    const mockRecords: Record[] = [
+      {
         id: '1',
         title: 'テスト1',
         time: 2,
-        created_at: new Date().toISOString()
+        created_at: new Date('2024-03-01T10:00:00Z')
       },
+    ];
+    
+    const getAllMock = jest.fn().mockResolvedValue({
+      data: mockRecords,
       error: null
     });
 
@@ -174,6 +181,55 @@ describe("学習記録一覧のテスト", () => {
 
     await waitFor(() => {
       expect(screen.queryByAltText('テスト1')).not.toBeInTheDocument()
+    })
+
+  });
+
+  it("モーダルのタイトルが記録編集である", async() => {
+    // deleteRecord のモックを設定
+    const updateMock = jest.fn().mockResolvedValue({
+      data: null,
+      error: null
+    });
+
+    jest.mock("../hooks/api/updateRecord", () => {
+      return{
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        updateRecord: (id:number) => updateMock(),
+      }
+    });
+
+    const mockRecords: Record[] = [
+      {
+        id: '1',
+        title: 'テスト1',
+        time: 2,
+        created_at: new Date('2024-03-01T10:00:00Z')
+      },
+    ];
+    
+    const getAllMock = jest.fn().mockResolvedValue({
+      data: mockRecords,
+      error: null
+    });
+
+    jest.mock("../hooks/api/getStudyRecords", () => {
+      return{
+        getStudyRecords: () => getAllMock(),
+      }
+    });
+    
+    render(<StudyRecord />);
+
+    // 更新ボタンがあるか
+    const updateButton = await screen.findByTestId('update-button_1');
+    expect(updateButton).toBeInTheDocument();
+
+    // 削除ボタンをクリック
+    await userEvent.click(updateButton);
+
+    await waitFor(() => {
+      expect(screen.queryByAltText('記録編集')).toBeInTheDocument();
     })
 
   });
