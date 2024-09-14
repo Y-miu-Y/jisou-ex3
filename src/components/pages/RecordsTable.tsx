@@ -1,7 +1,7 @@
 import { FC, memo, useEffect, useState } from "react";
 import { useAllRecords } from "../../hooks/useAllRecords";
 import { Loading } from "../molecules/Loading";
-import { Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
+import { Button, Center, Container, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import { Header } from "../organism/layout/Header";
 import { ActionButton } from "../atoms/buttons/ActionButton";
 import { RecordModalForm } from "../organism/records/RecordModalForm";
@@ -42,39 +42,45 @@ export const RecordsTable: FC = memo(() => {
       ) : (
         <>
           <Header />
-          <ActionButton onClick={onOpen}>
-            新規登録
-          </ActionButton>
-          <TableContainer>
-            <Table data-testid='studyRecordTable'>
-              <Thead>
-                <Tr>
-                  <Th>学習内容</Th>
-                  <Th>学習時間</Th>
-                  <Th></Th>
-                  <Th></Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {records.map((record) => (
-                  <Tr key={record.id} data-testid={`row_${record.id}`}>
-                    <Td data-testid={`row-title_${record.id}`}>{record.title}</Td>
-                    <Td data-testid={`row-time_${record.id}`}>{record.time}時間</Td>
-                    <Td>
-                      <Button onClick={() => openUpdateModal(record)} data-testid={`update-button_${record.id}`}>
-                        更新
-                      </Button>
-                    </Td>
-                    <Td>
-                      <Button onClick={() => removeRecord(record.id)} data-testid={`delete-button_${record.id}`}>
-                        削除
-                      </Button>
-                    </Td>
+          <Container maxW="1200px">
+            <Center>
+              <ActionButton onClick={onOpen}>
+                新規登録
+              </ActionButton>
+            </Center>
+            
+            <TableContainer>
+              <Table data-testid='studyRecordTable'>
+                <Thead>
+                  <Tr>
+                    <Th>学習内容</Th>
+                    <Th>学習時間</Th>
+                    <Th></Th>
+                    <Th></Th>
                   </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                </Thead>
+                <Tbody>
+                  {records.map((record) => (
+                    <Tr key={record.id} data-testid={`row_${record.id}`}>
+                      <Td data-testid={`row-title_${record.id}`}>{record.title}</Td>
+                      <Td data-testid={`row-time_${record.id}`}>{record.time}時間</Td>
+                      <Td>
+                        <Button onClick={() => openUpdateModal(record)} data-testid={`update-button_${record.id}`}>
+                          更新
+                        </Button>
+                      </Td>
+                      <Td>
+                        <Button onClick={() => removeRecord(record.id)} data-testid={`delete-button_${record.id}`}>
+                          削除
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </Container>
+          
           <RecordModalForm 
             isOpen={isOpen}
             onClose={onClose}
